@@ -1,0 +1,4 @@
+picontrol.configPath: ./config/
+
+logging.level:
+  de.msteiger: DEBUG

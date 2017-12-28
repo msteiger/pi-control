@@ -1,0 +1,12 @@
+{
+  "2" : {
+    "name" : null,
+    "gpioPin" : 0,
+    "triggers" : [ ]
+  },
+  "light1" : {
+    "name" : "Light 1",
+    "gpioPin" : 2,
+    "triggers" : [ ]
+  }
+}
