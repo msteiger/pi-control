@@ -35,7 +35,7 @@ public class RelayEndpoint {
     }
 
     @RequestMapping("{id}/toggle")
-    public ResponseEntity<?> toggle(@PathVariable("id") int id) {
+    public ResponseEntity<?> toggle(@PathVariable("id") String id) {
         logger.info("Toggling relay with ID '{}'", id);
         gpioService.toggle(id);
         return ResponseEntity.ok().build();

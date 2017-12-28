@@ -2,16 +2,24 @@ package de.msteiger.picontrol.model;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.EnumSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * TODO: describe
  */
 public class TriggerTime {
 
-    private Set<DayOfWeek> weekDays = EnumSet.noneOf(DayOfWeek.class);
+    private Set<DayOfWeek> weekDays;
     private LocalTime time;
+
+    @JsonCreator
+    public TriggerTime(@JsonProperty("weekDays") Set<DayOfWeek> weekDays, @JsonProperty("time") LocalTime time) {
+        this.weekDays = weekDays;
+        this.time = time;
+    }
 
     /**
      * @return the weekDays

@@ -1,12 +1,18 @@
 {
   "2" : {
-    "name" : null,
-    "gpioPin" : 0,
-    "triggers" : [ ]
+    "name" : "Light 1",
+    "gpioPin" : 2,
+    "triggers" : [ {
+      "weekDays" : [ "MONDAY" ],
+      "time" : "02:21:00"
+    } ]
   },
   "light1" : {
     "name" : "Light 1",
     "gpioPin" : 2,
-    "triggers" : [ ]
+    "triggers" : [ {
+      "weekDays" : [ "MONDAY" ],
+      "time" : "02:21:00"
+    } ]
   }
 }

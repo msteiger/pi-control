@@ -30,7 +30,7 @@ public class IntegrationTest {
 
     @Test
     public void test() {
-        assertEquals(template.getForEntity("/lights/2/toggle", String.class).getStatusCode(), HttpStatus.OK);
-        verify(gpioService).toggle(2);
+        assertEquals(template.postForEntity("/relays/light1/toggle", null, String.class).getStatusCode(), HttpStatus.OK);
+        verify(gpioService).toggle("light1");
     }
 }

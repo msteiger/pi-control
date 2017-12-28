@@ -20,7 +20,7 @@ public class GpioService {
 //    /**
 //     * @param id
 //     */
-    public void toggle(int id) {
+    public void toggle(String id) {
 //        pin1.pulse(1000, false);
     }
 
