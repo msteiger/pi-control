@@ -1,9 +1,13 @@
 package de.msteiger.picontrol.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GpioService {
+
+    private static final Logger logger = LoggerFactory.getLogger(GpioService.class);
 
 //    private final GpioController gpio = GpioFactory.getInstance();
 //    private final GpioPinDigitalOutput pin1;
@@ -21,6 +25,7 @@ public class GpioService {
 //     * @param id
 //     */
     public void toggle(String id) {
+        logger.debug("Pulsing pin " + id);
 //        pin1.pulse(1000, false);
     }
 

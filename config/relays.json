@@ -11,8 +11,8 @@
     "name" : "Light 1",
     "gpioPin" : 2,
     "triggers" : [ {
-      "weekDays" : [ "MONDAY" ],
-      "time" : "02:21:00"
+      "weekDays" : [ "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" ],
+      "time" : "15:44:00"
     } ]
   }
 }

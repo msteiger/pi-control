@@ -2,6 +2,7 @@ package de.msteiger.picontrol.model;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -44,5 +45,27 @@ public class TriggerTime {
      */
     public void setTime(LocalTime time) {
         this.time = time;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(weekDays, time);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        TriggerTime other = (TriggerTime) obj;
+        return Objects.equals(weekDays, other.weekDays) && Objects.equals(time, other.time);
+    }
+
+    @Override
+    public String toString() {
+        return "TriggerTime [weekDays=" + weekDays + ", time=" + time + "]";
     }
 }

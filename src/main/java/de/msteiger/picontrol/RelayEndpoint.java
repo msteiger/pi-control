@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.msteiger.picontrol.model.RelayInfo;
-import de.msteiger.picontrol.services.DataService;
-import de.msteiger.picontrol.services.GpioService;
+import de.msteiger.picontrol.services.RelayService;
 
 @RestController
 @RequestMapping(path = "relays",
@@ -24,20 +23,17 @@ public class RelayEndpoint {
 
     private static final Logger logger = LoggerFactory.getLogger(RelayEndpoint.class);
 
-    private final GpioService gpioService;
-
-    private DataService dataService;
+    private RelayService dataService;
 
     @Autowired
-    public RelayEndpoint(GpioService gpioService, DataService dataService) {
-        this.gpioService = gpioService;
+    public RelayEndpoint(RelayService dataService) {
         this.dataService = dataService;
     }
 
     @RequestMapping("{id}/toggle")
     public ResponseEntity<?> toggle(@PathVariable("id") String id) {
         logger.info("Toggling relay with ID '{}'", id);
-        gpioService.toggle(id);
+        dataService.toggleRelay(id);
         return ResponseEntity.ok().build();
     }
 
