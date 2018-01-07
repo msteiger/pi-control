@@ -1,27 +1,9 @@
-plugins {
-  id "org.hidetake.ssh" version "2.9.0"
-}
-
 apply plugin: 'java'
 apply plugin: 'application'
 
 repositories {
     mavenCentral()
-    mavenLocal()
 }
-
-ssh.settings {
-  jschLog= true
-  knownHosts = allowAnyHosts
-}
-
-remotes {
-  webServer {
-    host = 'raspberrypi'
-    user = 'pi'
-  }
-}
-
 
 mainClassName = 'de.msteiger.picontrol.PiControlMain'
 
@@ -45,13 +27,10 @@ dependencies {
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '1.5.9.RELEASE'
 }
 
-task deploy {
-  doLast {
-    ssh.run {
-      session(remotes.webServer) {
-        put from: 'build/install/pi-control', into: '~'
-        execute 'sudo ls'
-      }
-    }
-  }
+installDist.dependsOn check
+
+task deploy(type:Exec) {
+  dependsOn(installDist)
+
+  commandLine 'scp', '-r', '-p', 'build/install/pi-control', 'pi@raspberrypi:~'
 }
