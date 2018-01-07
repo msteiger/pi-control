@@ -11,7 +11,9 @@ import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.RaspiGpioProvider;
 import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.RaspiPinNumberingScheme;
 
 @Component
 public class GpioService {
@@ -25,6 +27,7 @@ public class GpioService {
     private final Map<Integer, GpioPinDigitalOutput> pins = new HashMap<>();
 
     public GpioService() {
+        GpioFactory.setDefaultProvider(new RaspiGpioProvider(RaspiPinNumberingScheme.BROADCOM_PIN_NUMBERING));
         gpio = GpioFactory.getInstance();
         for (int i = MIN_PIN; i <= MAX_PIN; i++) {
             GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(i), "MyPin", PinState.LOW);
