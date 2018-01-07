@@ -2,10 +2,10 @@ package de.msteiger.picontrol.services;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 
@@ -34,16 +34,15 @@ public class RelayService {
     @Autowired
     private GpioService gpioService;
 
-    private Map<String, RelayInfo> relayInfos;
-    private Map<String, List<String>> timerIds = new HashMap<>();
+    private Map<String, RelayInfo> relayInfos = new LinkedHashMap<>();
+    private Map<String, List<String>> timerIds = new LinkedHashMap<>();
 
     @PostConstruct
     private void init() throws IOException {
-        relayInfos = persistenceService.loadRelays();
-        for (Entry<String, RelayInfo> entry : relayInfos.entrySet()) {
-            String id = entry.getKey();
-            RelayInfo value = entry.getValue();
-            updateSchedules(id, value);
+        List<RelayInfo> list = persistenceService.loadRelays();
+        for (RelayInfo info : list) {
+            relayInfos.put(info.getId(), info);
+            updateSchedules(info.getId(), info);
         }
     }
 
@@ -58,20 +57,23 @@ public class RelayService {
         timerService.removeAll(oldTimers);
 
         for (TriggerTime tt : value.getTriggers()) {
-            String timerId = timerService.schedule(tt.getWeekDays(), tt.getTime(), () -> toggleRelay(id));
-            timerIdList.add(timerId);
-            logger.debug("Scheduled timer '{}' at '{}'", id, tt);
+            if (!tt.getWeekDays().isEmpty()) {
+                String timerId = timerService.schedule(tt.getWeekDays(), tt.getTime(), () -> toggleRelay(id));
+                timerIdList.add(timerId);
+                logger.debug("Scheduled timer '{}' at '{}'", id, tt);
+            }
         }
     }
 
     /**
      * @param id
      * @param ri
+     * @throws IOException
      */
-    public void saveRelay(String id, RelayInfo ri) throws IOException {
-        relayInfos.put(id, ri);
-        persistenceService.storeRelays(relayInfos);
-        updateSchedules(id, ri);
+    public void saveRelay(RelayInfo ri) throws IOException {
+        relayInfos.put(ri.getId(), ri);
+        persistenceService.storeRelays(relayInfos.values());
+        updateSchedules(ri.getId(), ri);
     }
 
     /**
@@ -85,6 +87,7 @@ public class RelayService {
     /**
      * @param id
      * @return
+     * @throws IOException
      */
     public RelayInfo remove(String id) throws IOException {
         RelayInfo old = relayInfos.remove(id);
@@ -92,7 +95,7 @@ public class RelayService {
             return null;
         }
         timerService.removeAll(timerIds.get(id));
-        persistenceService.storeRelays(relayInfos);
+        persistenceService.storeRelays(relayInfos.values());
         return old;
     }
 
@@ -100,7 +103,19 @@ public class RelayService {
      * @param id
      */
     public void toggleRelay(String id) {
-        gpioService.toggle(id);
+        RelayInfo relayInfo = relayInfos.get(id);
+        if (relayInfo != null) {
+            gpioService.toggle(relayInfo.getGpioPin());
+        } else {
+            logger.warn("No relay with ID '{}' found", id);
+        }
+    }
+
+    /**
+     * @return
+     */
+    public Collection<RelayInfo> getAllRelays() {
+        return relayInfos.values();
     }
 
 }

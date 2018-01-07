@@ -1,18 +1,20 @@
-{
-  "2" : {
-    "name" : "Light 1",
-    "gpioPin" : 2,
-    "triggers" : [ {
-      "weekDays" : [ "MONDAY" ],
-      "time" : "02:21:00"
-    } ]
-  },
-  "light1" : {
-    "name" : "Light 1",
-    "gpioPin" : 2,
-    "triggers" : [ {
-      "weekDays" : [ "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" ],
-      "time" : "15:44:00"
-    } ]
-  }
-}
+[ {
+  "id" : "2",
+  "name" : "Light 2",
+  "gpioPin" : 2,
+  "triggers" : [ {
+    "weekDays" : [ "SATURDAY" ],
+    "time" : "02:21:00"
+  }, {
+    "weekDays" : [ "FRIDAY", "THURSDAY", "WEDNESDAY", "MONDAY", "TUESDAY" ],
+    "time" : "06:16:00"
+  } ]
+}, {
+  "id" : "light1",
+  "name" : "Light 1",
+  "gpioPin" : 4,
+  "triggers" : [ {
+    "weekDays" : [ "THURSDAY", "MONDAY", "TUESDAY" ],
+    "time" : "03:42:00"
+  } ]
+} ]

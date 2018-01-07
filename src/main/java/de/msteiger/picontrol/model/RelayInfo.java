@@ -8,9 +8,24 @@ import java.util.List;
  */
 public class RelayInfo {
 
+    private String id;
     private String name;
     private int gpioPin;
     private List<TriggerTime> triggers = new ArrayList<>();
+
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * @return the name

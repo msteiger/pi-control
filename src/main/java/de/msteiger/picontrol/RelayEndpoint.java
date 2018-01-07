@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,18 +17,22 @@ import de.msteiger.picontrol.model.RelayInfo;
 import de.msteiger.picontrol.services.RelayService;
 
 @RestController
-@RequestMapping(path = "relays",
-    produces = "application/json; charset=UTF-8",
-    consumes = "application/json; charset=UTF-8")
+@RequestMapping(path = "relays", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class RelayEndpoint {
 
     private static final Logger logger = LoggerFactory.getLogger(RelayEndpoint.class);
 
-    private RelayService dataService;
+    private final RelayService dataService;
 
     @Autowired
     public RelayEndpoint(RelayService dataService) {
         this.dataService = dataService;
+    }
+
+    @RequestMapping
+    public ResponseEntity<?> listAll() {
+        logger.info("Listing all items");
+        return ResponseEntity.ok(dataService.getAllRelays());
     }
 
     @RequestMapping("{id}/toggle")
@@ -38,7 +43,7 @@ public class RelayEndpoint {
     }
 
     @RequestMapping("{id}")
-    public ResponseEntity<?> list(@PathVariable("id") String id) {
+    public ResponseEntity<?> show(@PathVariable("id") String id) {
         logger.info("Listing details for ID '{}'", id);
 
         RelayInfo relayInfo = dataService.getRelay(id);
@@ -60,10 +65,10 @@ public class RelayEndpoint {
         }
     }
 
-    @RequestMapping(path = "{id}", method = RequestMethod.POST)
-    public ResponseEntity<?> update(@PathVariable("id") String id, @RequestBody RelayInfo info) throws IOException {
-        logger.info("Updating entries for ID '{}'", id);
-        dataService.saveRelay(id, info);
+    @RequestMapping(method = RequestMethod.POST)
+    public ResponseEntity<?> update(@RequestBody RelayInfo info) throws IOException {
+        logger.info("Updating entries for ID '{}'", info.getId());
+        dataService.saveRelay(info);
         return ResponseEntity.ok().build();
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import de.msteiger.picontrol.model.RelayInfo;
 import de.msteiger.picontrol.services.GpioService;
 
 /**
@@ -29,8 +30,14 @@ public class IntegrationTest {
     private TestRestTemplate template;
 
     @Test
-    public void test() {
+    public void testToggle() {
         assertEquals(template.postForEntity("/relays/light1/toggle", null, String.class).getStatusCode(), HttpStatus.OK);
-        verify(gpioService).toggle("light1");
+        verify(gpioService).toggle(4);
+    }
+
+    @Test
+    public void testListAll() {
+        RelayInfo[] list = template.getForObject("/relays", RelayInfo[].class);
+        assertEquals("Light 1", list[1].getName());
     }
 }

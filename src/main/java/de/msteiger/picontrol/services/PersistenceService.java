@@ -6,8 +6,9 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +46,7 @@ public class PersistenceService {
      * @param relaisInfos
      * @throws IOException
      */
-    public void storeRelays(Map<String, RelayInfo> relaisInfos) throws IOException {
+    public void storeRelays(Collection<RelayInfo> relaisInfos) throws IOException {
         Path relayFile = getRelayFile();
         relayFile.getParent().toFile().mkdirs();
         try (OutputStream os = Files.newOutputStream(relayFile)) {
@@ -54,13 +55,14 @@ public class PersistenceService {
         }
     }
 
-    public Map<String, RelayInfo> loadRelays() throws IOException {
+    public List<RelayInfo> loadRelays() throws IOException {
         if (!getRelayFile().toFile().exists()) {
-            return new HashMap<>();
+            return new ArrayList<>();
         }
         try (InputStream is = Files.newInputStream(getRelayFile())) {
-            TypeReference<?> type = new TypeReference<Map<String, RelayInfo>>() { /**/ };
-            return objectMapper.readValue(is, type);
+            TypeReference<?> type = new TypeReference<List<RelayInfo>>() { /**/ };
+            List<RelayInfo> list = objectMapper.readValue(is, type);
+            return list;
         }
     }
 
