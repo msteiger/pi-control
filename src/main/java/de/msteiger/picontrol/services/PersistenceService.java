@@ -57,9 +57,11 @@ public class PersistenceService {
 
     public List<RelayInfo> loadRelays() throws IOException {
         if (!getRelayFile().toFile().exists()) {
+            logger.info("Did not find config file '{}' .. starting fresh", getRelayFile());
             return new ArrayList<>();
         }
         try (InputStream is = Files.newInputStream(getRelayFile())) {
+            logger.info("Loading config file '{}' .. starting fresh", getRelayFile());
             TypeReference<?> type = new TypeReference<List<RelayInfo>>() { /**/ };
             List<RelayInfo> list = objectMapper.readValue(is, type);
             return list;
