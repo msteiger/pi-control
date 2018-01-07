@@ -19,6 +19,7 @@ public class TimerService {
     private final Scheduler scheduler = new Scheduler();
 
     public TimerService() {
+        scheduler.setDaemon(true);
         scheduler.start();
     }
 

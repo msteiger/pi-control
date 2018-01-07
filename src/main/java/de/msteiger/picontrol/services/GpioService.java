@@ -21,11 +21,11 @@ public class GpioService {
     private static final int MIN_PIN = 0;
     private static final int MAX_PIN = 10;
 
-    private final GpioController gpio = GpioFactory.getInstance();
+    private final GpioController gpio;
     private final Map<Integer, GpioPinDigitalOutput> pins = new HashMap<>();
 
     public GpioService() {
-
+        gpio = GpioFactory.getInstance();
         for (int i = MIN_PIN; i <= MAX_PIN; i++) {
             GpioPinDigitalOutput pin = gpio.provisionDigitalOutputPin(RaspiPin.getPinByAddress(i), "MyPin", PinState.LOW);
             pin.setShutdownOptions(true, PinState.LOW);
